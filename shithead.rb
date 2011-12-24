@@ -39,10 +39,11 @@ class Player
 end
 
 class Game
-  attr_accessor :players, :deck
+  attr_accessor :players, :deck, :pile
 
   def initialize(players)
     self.deck = Deck.new
+    self.pile = []
 
     self.players = []
     players.times do
