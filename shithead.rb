@@ -166,6 +166,23 @@ class Pile < Hand
     # Otherwise standard ranking
     card.rank >= last.rank
   end
+
+  def should_burn?
+    # Shouldn't burn if empty
+    return false if self.empty?
+
+    # Burn if a 10 was played
+    return true if self.last.magic?(:burn)
+
+    # Shouldn't burn otherwise if less than 4 cards
+    return false if self.size < 4
+
+    # Burn if 4 consecutive ranking cards have been played
+    return true if self.last(4).uniq.size == 1
+
+    # Otherwise no
+    false
+  end
 end
 
 class Game
@@ -208,7 +225,13 @@ loop do
 
   game.players.each do |player|
     puts
-    player.play!(game)
+    begin
+      player.play!(game)
+      if game.pile.should_burn?
+        game.pile = Pile.new
+        puts "*** Pile burnt ***"
+      end
+    end while game.pile.size == 0
     puts player
   end
 
