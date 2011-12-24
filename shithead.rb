@@ -142,12 +142,29 @@ end
 class Pile < Hand
   def <<(card)
     unless self.size == 0
-      if self.last.rank > card.rank
+      unless card_can_be_played?(card)
         raise IllegalMoveException.new("Can't play #{card} on #{self.last}")
       end
     end
 
     super(card)
+  end
+
+  def card_can_be_played?(card)
+    last = self.last
+
+    # Reset card and burn card can be played on anything
+    return true if card.magic?(:reset)
+    return true if card.magic?(:burn)
+
+    # Check for prior mirror card
+    last = self[self.size - 1] if last.magic?(:mirror)
+
+    # Check for prior reverse card
+    return card.rank <= last.rank if last.magic?(:reverse)
+
+    # Otherwise standard ranking
+    card.rank >= last.rank
   end
 end
 
