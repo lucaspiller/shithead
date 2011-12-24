@@ -166,3 +166,25 @@ class Game
     end
   end
 end
+
+game = Game.new((1..2).to_a.collect { |i| AiPlayer.new(i.to_s) })
+round = 0
+
+loop do
+  round += 1
+  puts
+  puts "*** ROUND #{round} ***"
+
+  game.players.each do |player|
+    puts
+    player.play!(game)
+    puts player
+  end
+
+  puts
+  puts "Pile: #{game.pile.size} card(s)"
+  puts game.pile
+
+  puts
+  puts "Deck: #{game.deck.size} card(s)"
+end
