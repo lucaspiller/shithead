@@ -1,3 +1,6 @@
+class IllegalMoveException < Exception
+end
+
 class Rank < String
   def initialize(value)
     super(value.to_s)
@@ -67,7 +70,7 @@ class Pile < Array
   def <<(card)
     unless self.size == 0
       if self.last.rank > card.rank
-        raise RuntimeError.new("Illegal move; can't put #{card} on top of #{self.last}")
+        raise IllegalMoveException.new("Can't play #{card} on #{self.last}")
       end
     end
 
