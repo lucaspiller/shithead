@@ -1,5 +1,30 @@
+class Rank < String
+  def initialize(value)
+    super(value.to_s)
+  end
+
+  def to_i
+    case self
+    when "Jack"
+      11
+    when "Queen"
+      12
+    when "King"
+      13
+    when "Ace"
+      14
+    else
+      self.to_i
+    end
+  end
+
+  def <=>(other)
+    self.to_i <=> other.to_i
+  end
+end
+
 class Card
-  RANKS = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace)
+  RANKS = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).collect { |r| Rank.new(r) }
   SUITS = %w(Spade Heart Club Diamond)
 
   attr_accessor :rank, :suit, :id
