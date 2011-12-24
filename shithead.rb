@@ -57,12 +57,14 @@ class Deck < Array
 end
 
 class Player
-  attr_accessor :face_down_cards, :face_up_cards, :hand_cards
+  attr_accessor :face_down_cards, :face_up_cards, :hand_cards, :name
 
   def initialize
     self.face_down_cards = []
     self.face_up_cards = []
     self.hand_cards = []
+  def initialize(name)
+    self.name = name
   end
 end
 
