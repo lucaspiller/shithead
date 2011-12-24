@@ -65,10 +65,19 @@ class Player
     self.hand_cards = []
   def initialize(name)
     self.name = name
+    self.face_down_cards = Hand.new
+    self.face_up_cards = Hand.new
+    self.hand_cards = Hand.new
+  end
+
+class Hand < Array
+  def <<(card)
+    return if card.nil?
+    super(card)
   end
 end
 
-class Pile < Array
+class Pile < Hand
   def <<(card)
     unless self.size == 0
       if self.last.rank > card.rank
