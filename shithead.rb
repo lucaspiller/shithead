@@ -22,7 +22,7 @@ end
 class Deck < Array
   def initialize
     # shuffle array and init each Card
-    (0..51).to_a.shuffle.each do |id|
+    (0..51).to_a.each do |id|
       self << Card.new(id)
     end
   end
@@ -41,8 +41,9 @@ end
 class Game
   attr_accessor :players, :deck, :pile
 
-  def initialize(players)
-    self.deck = Deck.new
+  def initialize(players, decks = 1)
+    self.deck = Deck.new * decks
+    self.deck.shuffle!
     self.pile = []
 
     self.players = []
