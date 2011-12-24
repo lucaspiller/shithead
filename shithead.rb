@@ -14,7 +14,7 @@ class Rank < String
     when "Ace"
       14
     else
-      self.to_i
+      super
     end
   end
 
