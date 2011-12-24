@@ -97,10 +97,7 @@ class Game
     self.deck.shuffle!
     self.pile = Pile.new
 
-    self.players = []
-    players.times do
-      self.players << Player.new
-    end
+    self.players = players
 
     3.times do
       self.players.each do |player|
