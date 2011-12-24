@@ -215,30 +215,32 @@ class Game
   end
 end
 
-game = Game.new((1..2).to_a.collect { |i| AiPlayer.new(i.to_s) })
-round = 0
+if $0 == __FILE__
+  game = Game.new((1..4).to_a.collect { |i| AiPlayer.new(i.to_s) })
+  round = 0
 
-loop do
-  round += 1
-  puts
-  puts "*** ROUND #{round} ***"
-
-  game.players.each do |player|
+  loop do
+    round += 1
     puts
-    begin
-      player.play!(game)
-      if game.pile.should_burn?
-        game.pile = Pile.new
-        puts "*** Pile burnt ***"
-      end
-    end while game.pile.size == 0
-    puts player
+    puts "*** ROUND #{round} ***"
+
+    game.players.each do |player|
+      puts
+      begin
+        player.play!(game)
+        if game.pile.should_burn?
+          game.pile = Pile.new
+          puts "*** Pile burnt ***"
+        end
+      end while game.pile.size == 0
+      puts player
+    end
+
+    puts
+    puts "Pile: #{game.pile.size} card(s)"
+    puts game.pile
+
+    puts
+    puts "Deck: #{game.deck.size} card(s)"
   end
-
-  puts
-  puts "Pile: #{game.pile.size} card(s)"
-  puts game.pile
-
-  puts
-  puts "Deck: #{game.deck.size} card(s)"
 end
