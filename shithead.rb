@@ -29,6 +29,12 @@ end
 class Card
   RANKS = %w(2 3 4 5 6 7 8 9 10 Jack Queen King Ace).collect { |r| Rank.new(r) }
   SUITS = %w(Spade Heart Club Diamond)
+  MAGIC_RANKS = {
+    2 => :reset,
+    7 => :reverse,
+    8 => :mirror,
+    10 => :burn
+  }
 
   attr_accessor :rank, :suit, :id
 
@@ -39,11 +45,19 @@ class Card
   end
 
   def to_s
-    "#{self.rank} of #{self.suit}s"
+    "#{self.rank} of #{self.suit}s" + (magic? ? " (#{magic?})" : "")
   end
 
   def <=>(other)
     self.id <=> other.id
+  end
+
+  def magic?(type = nil)
+    if type
+      MAGIC_RANKS[self.rank.to_i] == type
+    else
+      MAGIC_RANKS[self.rank.to_i] || false
+    end
   end
 end
 
