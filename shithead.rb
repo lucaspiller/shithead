@@ -59,16 +59,64 @@ end
 class Player
   attr_accessor :face_down_cards, :face_up_cards, :hand_cards, :name
 
-  def initialize
-    self.face_down_cards = []
-    self.face_up_cards = []
-    self.hand_cards = []
   def initialize(name)
     self.name = name
     self.face_down_cards = Hand.new
     self.face_up_cards = Hand.new
     self.hand_cards = Hand.new
   end
+
+  def say(text)
+    puts ">> #{name}: #{text}"
+  end
+
+  def to_s
+    "#{name} Hand: #{self.hand_cards.size} Up: #{self.face_up_cards.size} Down: #{self.face_down_cards.size}"
+  end
+end
+
+class AiPlayer < Player
+  def play!(game)
+    self.hand_cards.each_index do |index|
+      card = self.hand_cards[index]
+      begin
+        game.pile << card
+        self.hand_cards.delete_at(index)
+        say "I played #{card}"
+        pickup!(game)
+        return
+      rescue IllegalMoveException
+        # try next card
+      end
+    end
+
+    # can't play
+    pickup_pile!(game)
+  end
+
+  def pickup_pile!(game)
+    self.hand_cards.push *game.pile
+    game.pile = Pile.new
+
+    say "I picked up"
+    play!(game)
+  end
+
+  def pickup!(game)
+    return unless self.hand_cards.size < 3
+
+    self.hand_cards << game.deck.pop
+    return if self.hand_cards.size > 0
+
+    self.hand_cards << self.face_up_cards.pop
+    return if self.hand_cards.size > 0
+
+    self.hand_cards << self.face_down_cards.pop
+    return if self.hand_cards.size > 0
+
+    raise RuntimeError.new("Player #{name} won")
+  end
+end
 
 class Hand < Array
   def <<(card)
