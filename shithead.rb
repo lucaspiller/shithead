@@ -38,13 +38,25 @@ class Player
   end
 end
 
+class Pile < Array
+  def <<(card)
+    unless self.size == 0
+      if self.last.rank > card.rank
+        raise RuntimeError.new("Illegal move; can't put #{card} on top of #{self.last}")
+      end
+    end
+
+    super(card)
+  end
+end
+
 class Game
   attr_accessor :players, :deck, :pile
 
   def initialize(players, decks = 1)
     self.deck = Deck.new * decks
     self.deck.shuffle!
-    self.pile = []
+    self.pile = Pile.new
 
     self.players = []
     players.times do
